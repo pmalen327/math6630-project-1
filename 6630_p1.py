@@ -8,7 +8,6 @@ import matplotlib.pyplot as plt
 from scipy.linalg import norm
 
 
-# starting the fuck over kms
 # mesh points
 N=10
 
@@ -22,38 +21,45 @@ x = []
 for i in j:
     x.append(i*h)
 
-f = []
-for i in x:
-    val1 = -4
+def f(x):
+    val = 4
     for L in range(1,6):
-        val1 += -2*(1/(N+1))*np.sin(L*i*np.pi)
-        val2 = (-2*i+1)*(1/(N+1))*np.cos(L*i*np.pi)*L*np.pi
-    f.append(val1+val2)
+        val += ((2*x-1)*(np.cos(L*np.pi*x)*L*np.pi)-2*(np.sin(L*np.pi*x)))/(L+1)
+    return val
+
+fVec = []
+for i in range(0, len(j)):
+    fVec.append(f(x[i]))
+
+def u(x):
+    return((x**2)-x)
 
 
+def diff(func,var):
+    numerator = (func(*var+h/2))-(func(*var-h/2))
+    denom = h/2
+    return(numerator/denom)
 
-kappa = []
-for i in x:
+
+def kappa(x):
     val = 2
-    for L in range(1,6):
-        val += 1/(L+1)*np.sin(L*np.pi*i)
-    kappa.append(val)
+    for L in range(0,6):
+        val += (np.sin(np.pi*L*x))/(1+L)
+    return val
 
 
-# this is fucked
-tildeD = []
-for i in range(0,len(j)):
-    num = -(x[i]+h/2)*(x[i]+h/2-1) + (x[i]-h/2)*(x[i]-h/2-1)
-    tildeD.append(num/(h/2)*kappa[i])
+def laplace(var):
+    arg = kappa(*var)*diff(u,*var)
+    return(diff(arg,*var))
 
-
-# this is fucked
 sol = []
-for i in range(0,len(j)):
-    temp = -(tildeD[i]+h/2)*(tildeD[i]+h/2-1) + (tildeD[i]-h/2)*(tildeD[i]-h/2-1)
-    sol.append(temp/(h/2))
+for i in range(0, len(j)):
+    sol.append(laplace(x[i]))
 
-print(sol,f)
+print(f,sol)
+
+
+
 
 
 
