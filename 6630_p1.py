@@ -5,58 +5,62 @@
 
 import numpy as np
 import matplotlib.pyplot as plt
-import scipy.sparse as sp
-import scipy.sparse.linalg  as la
 from scipy.linalg import norm
 
 
-# number of points in mesh
-# will loop over this later, just using 100 for the initialization
-N = 10
+# starting the fuck over kms
+# mesh points
+N=10
 
-# this is strictly for plotting, but ofc that shit is bugged too
-noN = list(range(1,N+1))
+h=1/(N+1)
 
-
-# step size
-h = 1/(N+1)
-
-
-# steps
 j = []
-for i in range(1,N+1):
+for i in range(0,N+2):
     j.append(i)
 
-
-
-# x values at each j
-# for x in [0,1]
-x = [0]
+x = []
 for i in j:
     x.append(i*h)
-x.append(1)    
 
-
-
-# kappa values at each j
-kappa = []
-for index in range(0,len(j) + 2):
-    val = 2
-    for L in range(1,6):
-        val += 1/(L+1)*np.sin(L*x[index]*np.pi)
-    kappa.append(val)
-
-# f values at each j
 f = []
-for index in range(0,len(j) + 2):
+for i in x:
     val1 = -4
     for L in range(1,6):
-        val1 += -2*(1/(L+1)*np.sin(L*x[index]*np.pi))
-    val2 = -2*x[index]+1
-    for L in range(1,6):
-        val2 += (1/(L+1)*np.cos(L*x[index]*np.pi))*L*np.pi
-
+        val1 += -2*(1/(N+1))*np.sin(L*i*np.pi)
+        val2 = (-2*i+1)*(1/(N+1))*np.cos(L*i*np.pi)*L*np.pi
     f.append(val1+val2)
+
+
+
+kappa = []
+for i in x:
+    val = 2
+    for L in range(1,6):
+        val += 1/(L+1)*np.sin(L*np.pi*i)
+    kappa.append(val)
+
+
+# this is fucked
+tildeD = []
+for i in range(0,len(j)):
+    num = -(x[i]+h/2)*(x[i]+h/2-1) + (x[i]-h/2)*(x[i]-h/2-1)
+    tildeD.append(num/(h/2)*kappa[i])
+
+
+# this is fucked
+sol = []
+for i in range(0,len(j)):
+    temp = -(tildeD[i]+h/2)*(tildeD[i]+h/2-1) + (tildeD[i]-h/2)*(tildeD[i]-h/2-1)
+    sol.append(temp/(h/2))
+
+print(sol,f)
+
+
+
+
+
+
+
 
 
 
