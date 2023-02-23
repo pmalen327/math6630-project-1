@@ -50,7 +50,8 @@ def kappa(x):
 
 def laplace(var):
     arg = kappa(*var)*diff(u,*var)
-    return(diff(arg,*var))
+    return(diff(arg,*var)) # this is the problem child, apparently there is a
+                           # bad iterable or something
 
 sol = []
 for i in range(0, len(j)):
