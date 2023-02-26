@@ -2,62 +2,47 @@
 # Preston Malen \\ u0984531 
 # February 2023
 
-# trying a sympy approach
-from sympy import *
 import numpy as np
 from numpy import linalg as la
-from math import *
+from scipy.linalg import norm
 
 
-x,h,L = symbols('x h L')
-
-N = 10
-h = N + 1
+N = 1000
+h = 1/(N+1)
 j = []
-
-for num in range(0,N+2):
-    j.append(num)
+for int in range(0,N+2):
+    j.append(int)
 
 xVec = []
-for num in j:
-    xVec.append(num/(h))
+for int in j:
+    xVec.append(int*h)
 
-u = x*(x-1)
-
-# the exact f(x) on the RHS
-def f(var):
-    val = 4
-    for L in range(1,6):
-        val += ((sin(L*pi*var)*2) + (2*var-1)*(cos(L*pi*var))*L*pi*var)/h
-    return val
 
 fVec = []
-for i in xVec:
-    fVec.append(f(i))
+for x in xVec:
+    val = 4
+    for L in range(0,6):
+        val += (((2*x-1)*np.cos(L*np.pi*x)*L*np.pi)+(2*np.sin(L*np.pi*x)))/(L+1)
+    fVec.append(val)
 
-# kappaArg = sin(L*pi*x)/(L+1)
-# kappa = 2 + Sum(kappaArg, (L,1,5)).doit()
-
-term1 = (sin(L*pi*(x+h/2))*(x+h/2-1))/(L+1)
-term2 = -(sin(L*pi*(x-h/2))*(x-h/2-1))/(L+1)
-
-sum1 = Sum(term1, (L,1,5)).doit()
-sum2 = Sum(term2, (L,1,5)).doit()
-laplaceOp = 2 + ((sum1-sum2)/h)
-
-
-
-
-# now just need to substitute values
-sol = []
-for num in xVec:
-    sol.append(laplaceOp.subs(x,num))
-sol = np.array(sol, dtype=np.float64)
+kappaPos = []
+kappaNeg = []
+for x in xVec:
+    valKappaPos = 2
+    valKappaNeg = 2
+    for L in range(0,6):
+        valKappaPos += (np.sin(L*np.pi*(x+h/2)))/(L+1)
+        valKappaNeg += (np.sin(L*np.pi*(x-h/2)))/(L+1)
+    kappaPos.append(valKappaPos)
+    kappaNeg.append(valKappaNeg)
 
 
-# LTE = abs(la.norm(sol)-la.norm(fVec))
-print(fVec)
+fApprox = []
+for int in j:
+    val = -(int*(int-1))*(kappaPos[int]+kappaNeg[int])+(kappaPos[int]*((int-h)*
+    (int+h-1)))+(kappaNeg[int]*((int-h)*(int-h-1)))
+    fApprox.append(val/(h**2))
 
 
-
-
+print(abs(norm(fApprox)-norm(fVec)))
+# print(fApprox,fVec)
