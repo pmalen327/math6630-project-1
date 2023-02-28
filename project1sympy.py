@@ -18,7 +18,8 @@ xVec = []
 for int in j:
     xVec.append(round(int*h,5))
 
-
+# THIS IS THE PROBLEM
+# fukkkkkkkkkkkkkkkkk
 fVec = []
 for x in xVec:
     val1 = 8
@@ -31,20 +32,23 @@ for x in xVec:
 
 
 
-kappaPos = [2.3 for i in range(0,len(xVec))]
-kappaNeg = [2 for i in range(0,len(xVec))]
+# kappaPos = [2 for i in range(0,len(xVec))]
+# kappaNeg = [3 for i in range(0,len(xVec))]
 
-# for x in xVec:
-#     valKappaPos = 2
-#     valKappaNeg = 2
-#     for L in range(1,6):
-#         valKappaPos += (np.sin(L*np.pi*(x+h/2)))/(L+1)
-#         valKappaNeg += (np.sin(L*np.pi*(x+h/2)))/(L+1)
-#     kappaPos.append(valKappaPos)
-#     kappaNeg.append(valKappaNeg)
+kappaPos = []
+kappaNeg = []
 
-# THIS IS THE PROBLEM
-# fukkkkkkkkkkkkkkkkk
+
+for x in xVec:
+    valKappaPos = 2
+    valKappaNeg = 2
+    for L in range(1,6):
+        valKappaPos += (np.sin(L*np.pi*(x+h/2)))/(L+1)
+        valKappaNeg += (np.sin(L*np.pi*(x+h/2)))/(L+1)
+    kappaPos.append(valKappaPos)
+    kappaNeg.append(valKappaNeg)
+
+
 fApprox = []
 for index in range(0, len(xVec)):
     val = 0
@@ -56,4 +60,4 @@ for index in range(0, len(xVec)):
 
 
 # print(fApprox,fVec)
-print(xVec,fVec,fApprox)
+print(fVec,fApprox)
