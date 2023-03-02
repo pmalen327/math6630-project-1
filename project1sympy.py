@@ -8,15 +8,15 @@ import matplotlib.pyplot as plt
 
 # Nvec = []
 # errorVec = []
-# for N in range(10, 60, 10):
-
+# for N in range(10, 1000, 100):
 #     Nvec.append(N)
 
-N = 20
+N = 1000
 h = round(1/(N+1),5)
 j = []
 for int in range(0,N+2):
     j.append(int)
+
 xVec = []
 for int in j:
     xVec.append(round(int*h,5))
@@ -36,20 +36,21 @@ for x in xVec:
     for L in range(1,6):
         valKappaPos += (np.sin(L*np.pi*(x+h/2)))/(L+1)
         valKappaNeg += (np.sin(L*np.pi*(x-h/2)))/(L+1)
-    kappaPos.append(valKappaPos)
-    kappaNeg.append(valKappaNeg)
+    kappaPos.append(round(valKappaPos,5))
+    kappaNeg.append(round(valKappaNeg,5))
+# print(kappaNeg)
+# print(kappaPos)
 
 fApprox = []
 for index in range(0, len(xVec)):
-    val = 0
-    uInit = (xVec[index]*(xVec[index]-1))
-    uNeg = (xVec[index]-h)*(xVec[index]-h-1)
-    uPos = (xVec[index]+h)*(xVec[index]+h-1)
-    val += (-(uInit*(kappaPos[index]+kappaNeg[index])) + (kappaPos[index]*uPos)
-             + (kappaNeg[index]*uNeg))/(h**2)
-    fApprox.append(round(val,5))
+    uInit = -(xVec[index]**2) + xVec[index]
+    uPos = ((xVec[index]+h)**2)-xVec[index]-h
+    uNeg = ((xVec[index]-h)**2)-xVec[index]+h
+    val = uInit*(kappaPos[index]+kappaNeg[index])+(kappaPos[index]*uPos)+(kappaNeg[index]*uNeg)
+    fApprox.append(round(val/(h**2),5))
 
-print(fVec,fApprox)
+
+# print(fVec,fApprox)
 
 # LTE = []
 # for i in range(0,len(fVec)):
@@ -59,11 +60,12 @@ print(fVec,fApprox)
 # print(Nvec,errorVec)
 
 # we want to look at the norm of the LTE as N grows
-# fig,ax = plt.subplots()
-# ax.plot(Nvec,errorVec)
-# ax.set(xlabel='N', ylabel='Local Truncation Error')
-# plt.yscale('log')
-# plt.show()
+fig,ax = plt.subplots()
+ax.plot(j,fVec, label = "True f(x)")
+ax.plot(j,fApprox, label = "Approximated f(x)")
+ax.set(xlabel='j', ylabel= "f(x)")
+leg = plt.legend(loc='upper right')
+plt.show()
 
 
 
