@@ -1,4 +1,4 @@
-To reproduce the figure, simply run `p1.py` with no additional arguments.  
+To reproduce the figure, simply run `p1.py` in the `code` folder with no additional arguments.  
 
 The `report.tex` SHOULD compile just fine but if there are any issues, there is
 a pre-compiled report `6630_Project_1.pdf`.  
