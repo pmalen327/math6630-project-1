@@ -11,7 +11,6 @@ from scipy.sparse.linalg import bicg
 Nvec = []
 errorVec = []
 for N in range(1000, 11000, 1000):
-    
     Nvec.append(N)
 
     h = round(1/(N+1),5)
@@ -48,15 +47,6 @@ for N in range(1000, 11000, 1000):
         kappaPos.append(round(valKappaPos,5))
         kappaNeg.append(round(valKappaNeg,5))
         kappaSum.append(-round(valKappaNeg+valKappaPos,5))
-
-
-    fApprox = []
-    for index in range(0, len(xVec)):
-        uInit = -(xVec[index]**2) + xVec[index]
-        uPos = ((xVec[index]+h)**2)-xVec[index]-h
-        uNeg = ((xVec[index]-h)**2)-xVec[index]+h
-        val = uInit*(kappaPos[index]+kappaNeg[index])+(kappaPos[index]*uPos)+(kappaNeg[index]*uNeg)
-        fApprox.append(round(val/(h**2),5))
 
 
     A = sparse.dia_matrix((N+2,N+2))

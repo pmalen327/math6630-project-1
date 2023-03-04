@@ -7,6 +7,9 @@
 \usepackage[footnotesize,bf]{caption}
 \usepackage[left=1.1in,right=1.1in,top=1in]{geometry}
 
+\usepackage{graphicx}
+\graphicspath{ {./images/} }
+
 \pagenumbering{gobble}
 \newcommand{\bs}[1]{\boldsymbol{#1}}
 \newcommand{\mathd}{\textrm{d}}
@@ -63,7 +66,7 @@ with homogeneous Dirichlet boundary conditions, $u(0) = u(1) = 0$ , and where sc
 \begin{itemize}
     \item[(a)] To calculate the local truncation error, we just need to expand the left-hand side of \eqref{eq:D0-def} and show we get a residual of $h^2$. So first, we consider the product $\kappa(x_j)\widetilde{D}_0u_j$:
     \begin{equation}\label{eq:arg}
-        \kappa(x_j)\widetilde{D}_0u_j = \kappa(x_j)\bigg( \frac{u(x_j + h/2)-u(x_j -h/2)}{2}\bigg)
+        \kappa(x_j)\widetilde{D}_0u_j = \kappa(x_j)\bigg( \frac{u(x_j + h/2)-u(x_j -h/2)}{h}\bigg)
     \end{equation}
     Now, we apply the given difference operator $\widetilde{D}_0$ to \eqref{eq:arg}. For brevity, we will define the following:
     \begin{align*}
@@ -78,20 +81,26 @@ with homogeneous Dirichlet boundary conditions, $u(0) = u(1) = 0$ , and where sc
     \end{equation}
     After some painful calculation, we get:
     \begin{equation*}
-        h^2f(x_j) = -u(x_j)(k_+ + k_-) + k_+u(x_j + h) - k_-u(x_j-h)
+        h^2f(x_j) = -u(x_j)(k_+ + k_-) + k_+u(x_j + h) + k_-u(x_j-h)
     \end{equation*}
     So the given scheme does in fact have a local truncation error of $h^2$.\newline
     \\
     \item[(b)] Consider the function $u(x) = x(x-1)$. It is clear that $u$ has roots at $0$ and $1$ so the boundary conditions are satisfied. We will now compute $f(x)$ explicitly using the given parameters:
-    \\
     %% NEED TO RE-CALCULATE/RE-WRITE EXACT SOLUTION
     \begin{align*}
-            \ddx{x} \left(\kappa(x) \ddx{x} u(x) \right) &=  \ddx{x} \bigg[\bigg(2 + \sum_{\ell=1}^{5} \frac{1}{\ell+1} \sin( \ell \pi x )\bigg) \cdot (2x-1) \bigg]\\
-           f(x) &= 4x -2 +\sum_{\ell=1}^5 \frac{(2x-1)(\cos(\ell \pi x)(\ell \pi)-2(\sin(\ell \pi x)}{\ell + 1}
+        \ddx{x} \left(\kappa(x) \ddx{x} u(x) \right) &=  \ddx{x} \bigg[\bigg(2 + \sum_{\ell=1}^{5} \frac{1}{\ell+1} \sin( \ell \pi x )\bigg) \cdot (2x-1) \bigg]\\
+        f(x) &= 4 +\sum_{\ell=1}^5 \frac{(2x-1)(\cos(\ell \pi x))(\ell \pi)+2\sin(\ell \pi x)}{\ell + 1}
     \end{align*}\newline
     \\
-    \item[(c)] Using the given difference operator $\widetilde{D}_0$ and the scalar diffusion constant $\kappa$, we consider the scheme given by:
+    \newpage
+    \item[(c)] First, we choose a suitable $N$. For this problem, it was sufficient to choose $N \in [10^3,10^4]$ in increments of $10^3$. Graphed below, we have $N$ along the $x-$axis, and the local truncation error of the scheme on the $y-$axis. Note also that the local truncation error is graphed on a log scale.
+
+    \begin{center}
+        \includegraphics[scale=.7]{Figure_1.png}
+    \end{center}\newline
+
+    \noindent Using SciPy's \code{linalg} class, we found acceptable convergence and runtime using an iterative conjugate gradient method with default parameters. 
+    
 \end{itemize}
-\code{if tired == true: return('kms')}
 
 \end{document}
