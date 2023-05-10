@@ -32,6 +32,9 @@
 \makeatother
 %%
 
+\usepackage[dvipsnames]{xcolor}
+\newcommand{\an}[1]{{\leavevmode\color{BrickRed}{#1}}}
+
 \title{Project 1: Finite difference methods}
 \author{Preston Malen}
 \date{February 2023}
@@ -76,7 +79,7 @@ with homogeneous Dirichlet boundary conditions, $u(0) = u(1) = 0$ , and where sc
         D_- &= \kappa_- \bigg( \frac{u(x_j) - u(x_j - h)}{h}\bigg)
     \end{align*}
     So in summary, we have the expression:
-    \begin{equation}
+    \begin{equation}\label{eq:scheme-rewritten}
         f(x_j) = \widetilde{D}_0 \left( \kappa(x_j) \widetilde{D}_0 u_j \right) = \frac{D_+ - D_-}{h}
     \end{equation}
     After some painful calculation, we get:
@@ -84,6 +87,7 @@ with homogeneous Dirichlet boundary conditions, $u(0) = u(1) = 0$ , and where sc
         h^2f(x_j) = -u(x_j)(k_+ + k_-) + k_+u(x_j + h) + k_-u(x_j-h)
     \end{equation*}
     So the given scheme does in fact have a local truncation error of $h^2$.\newline
+    \an{This seems incomplete. First I guess instead of $k_{\pm}$ above you mean $\kappa_{\pm}$. The equation above looks fine, but the point is to show that the LTE is second order by using Taylor series expansions.}
     \\
     \item[(b)] Consider the function $u(x) = x(x-1)$. It is clear that $u$ has roots at $0$ and $1$ so the boundary conditions are satisfied. We will now compute $f(x)$ explicitly using the given parameters:
     %% NEED TO RE-CALCULATE/RE-WRITE EXACT SOLUTION
@@ -100,6 +104,14 @@ with homogeneous Dirichlet boundary conditions, $u(0) = u(1) = 0$ , and where sc
     \end{center}\newline
 
     \noindent Using SciPy's \code{linalg} class, we found acceptable convergence and runtime using an iterative conjugate gradient method with default parameters. It is then clear that we do in fact achieve second order convergence in $h$ using the given scheme.    
+    \an{The error looks quite suboptimal here. Anyway, you should be plotting this on a log-log scale if you want to see clear second order convergence.}\\
+    \an{In your code, you are doing some weird things, but the ones that stand out to me are:
+    \begin{itemize}
+      \item You're rounding most things to 5 or 6 decimal places. (Why?)
+      \item You're using a lot of lists when you could just use numpy arrays.
+      \item You're computing the LTE as a vector norm, which is fine, but the vector you're creating is not the error, but instead the error squared.
+    \end{itemize}
+    }
 \end{itemize}
 
 \end{document}
